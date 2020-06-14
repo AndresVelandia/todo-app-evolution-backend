@@ -1,9 +1,11 @@
 import { Container } from 'typedi';
 import MailerService from '../services/mailer';
+import winston from 'winston';
+import { LOGGER_KEY } from '../config';
 
 export default class EmailSequenceJob {
   public async handler(job, done): Promise<void> {
-    const Logger = Container.get('logger');
+    const Logger: winston.Logger = Container.get(LOGGER_KEY);
     try {
       Logger.debug('✌️ Email Sequence Job triggered!');
       const { email, name }: { [key: string]: string } = job.attrs.data;

@@ -1,8 +1,11 @@
 import { Container } from 'typedi';
 import { EventSubscriber, On } from 'event-dispatch';
 import events from './events';
-import { IUser } from '../interfaces/IUser';
-import mongoose from 'mongoose';
+import { IUser } from '../interfaces';
+import { Model, Document } from 'mongoose';
+import winston from 'winston';
+import { USER_MODEL_KEY } from '../models';
+import { LOGGER_KEY } from '../config/index';
 
 @EventSubscriber()
 export default class UserSubscriber {
@@ -18,10 +21,10 @@ export default class UserSubscriber {
    */
   @On(events.user.signIn)
   public onUserSignIn({ _id }: Partial<IUser>) {
-    const Logger = Container.get('logger');
+    const Logger: winston.Logger = Container.get(LOGGER_KEY);
 
     try {
-      const UserModel = Container.get('UserModel') as mongoose.Model<IUser & mongoose.Document>;
+      const UserModel: Model<IUser & Document> = Container.get(USER_MODEL_KEY);
 
       UserModel.update({ _id }, { $set: { lastLogin: new Date() } });
     } catch (e) {
@@ -33,7 +36,7 @@ export default class UserSubscriber {
   }
   @On(events.user.signUp)
   public onUserSignUp({ name, email, _id }: Partial<IUser>) {
-    const Logger = Container.get('logger');
+    const Logger: winston.Logger = Container.get(LOGGER_KEY);
 
     try {
       /**

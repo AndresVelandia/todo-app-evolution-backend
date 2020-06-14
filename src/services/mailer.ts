@@ -1,10 +1,11 @@
 import { Service, Inject } from 'typedi';
 import { IUser } from '../interfaces/IUser';
+import { EMAIL_CLIENT_KEY } from '../config';
 
 @Service()
 export default class MailerService {
   constructor(
-    @Inject('emailClient') private emailClient
+    @Inject(EMAIL_CLIENT_KEY) private emailClient
   ) { }
 
   public async SendWelcomeEmail(email) {

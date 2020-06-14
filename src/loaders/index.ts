@@ -1,12 +1,17 @@
-import expressLoader from './express';
-import dependencyInjectorLoader from './dependencyInjector';
 import mongooseLoader from './mongoose';
+import {getModels} from '../models';
+import { initDependencyInjector } from './dependencyInjector';
+import createInitialData from './initialData';
+import expressLoader from './express';
+
+
 import jobsLoader from './jobs';
 import Logger from './logger';
+
 //We have to import at least all the events once so they can be triggered
 import './events';
 
-export default async ({ expressApp }) => {
+export const executeAllLoaders = async ({ expressApp }) => {
   const mongoConnection = await mongooseLoader();
   Logger.info('✌️ DB loaded and connected!');
 
@@ -18,22 +23,17 @@ export default async ({ expressApp }) => {
    * of writing unit tests, just go and check how beautiful they are!
    */
 
-  const userModel = {
-    name: 'userModel',
-    // Notice the require syntax and the '.default'
-    model: require('../models/user').default,
-  };
+  const models = getModels();
 
   // It returns the agenda instance because it's needed in the subsequent loaders
-  const { agenda } = await dependencyInjectorLoader({
+  const { agenda } = await initDependencyInjector({
     mongoConnection,
-    models: [
-      userModel,
-      // salaryModel,
-      // whateverModel
-    ],
+    models,
   });
   Logger.info('✌️ Dependency Injector loaded');
+
+  await createInitialData();
+  Logger.info('✌️ Initial data configured');
 
   await jobsLoader({ agenda });
   Logger.info('✌️ Jobs loaded');

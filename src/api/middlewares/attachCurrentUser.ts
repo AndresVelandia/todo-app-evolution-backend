@@ -1,6 +1,9 @@
 import { Container } from 'typedi';
-import mongoose from 'mongoose';
+import { Model, Document } from 'mongoose';
 import { IUser } from '../../interfaces/IUser';
+import winston from 'winston';
+import { USER_MODEL_KEY } from '../../models';
+import { LOGGER_KEY } from '../../config';
 
 /**
  * Attach user to req.currentUser
@@ -9,9 +12,9 @@ import { IUser } from '../../interfaces/IUser';
  * @param {*} next  Express next Function
  */
 const attachCurrentUser = async (req, res, next) => {
-  const Logger = Container.get('logger');
+  const Logger: winston.Logger = Container.get(LOGGER_KEY);
   try {
-    const UserModel = Container.get('userModel') as mongoose.Model<IUser & mongoose.Document>;
+    const UserModel: Model<IUser & Document> = Container.get(USER_MODEL_KEY);
     const userRecord = await UserModel.findById(req.token._id);
     if (!userRecord) {
       return res.sendStatus(401);

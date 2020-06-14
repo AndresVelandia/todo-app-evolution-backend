@@ -1,21 +1,17 @@
 import 'reflect-metadata'; // We need this in order to use @Decorators
-
 import config from './config';
-
 import express from 'express';
-
+import {executeAllLoaders} from './loaders';
 import Logger from './loaders/logger';
 
 async function startServer() {
   const app = express();
 
   /**
-   * A little hack here
-   * Import/Export can only be used in 'top-level code'
-   * Well, at least in node 10 without babel and at the time of writing
-   * So we are using good old require.
-   **/
-  await require('./loaders').default({ expressApp: app });
+   * execute all tasks related to the start of the server
+   * loads database, express routes, mongoose models, others
+   */
+  await executeAllLoaders({ expressApp: app });
 
   app.listen(config.port, err => {
     if (err) {

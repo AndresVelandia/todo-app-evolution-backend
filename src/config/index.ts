@@ -10,6 +10,10 @@ if (envFound.error) {
   throw new Error("⚠️  Couldn't find .env file  ⚠️");
 }
 
+export const LOGGER_KEY = process.env.DI_LOGGER_KEY || 'logger';
+export const JOB_EXECUTOR_KEY = process.env.DI_JOB_EXECUTOR_KEY ||'job_executor';
+export const EMAIL_CLIENT_KEY = process.env.DI_EMAIL_CLIENT_KEY ||'email_client';
+
 export default {
   /**
    * Your favorite port
@@ -61,5 +65,5 @@ export default {
   emails: {
     apiKey: process.env.MAILGUN_API_KEY,
     domain: process.env.MAILGUN_DOMAIN
-  }
+  },
 };

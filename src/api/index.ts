@@ -1,14 +1,20 @@
 import { Router } from 'express';
 import auth from './routes/auth';
-import user from './routes/user';
+import users from './routes/users';
+import tasks from './routes/tasks';
+import taskTags from './routes/taskTags';
+import taskPriorities from './routes/taskPriorities';
 import agendash from './routes/agendash';
 
-// guaranteed to get dependencies
-export default () => {
+export default function registerAllRoutes() {
 	const app = Router();
+
 	auth(app);
-	user(app);
+	users(app);
+	tasks(app);
+	taskTags(app);
+	taskPriorities(app);
 	agendash(app);
 
-	return app
+	return app;
 }
