@@ -50,7 +50,7 @@ export default class TasksService {
 
   public async updateTask(
     taskId: string | Types.ObjectId,
-    newTaskFields: Partial<ITaskCreateOrUpdateDTO>,
+    newTaskFields: Partial<ITask>,
   ): Promise<Partial<ITask>> {
     try {
       this.utilsService.deleteNullFields(newTaskFields);

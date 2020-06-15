@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { Container as TypeDiContainer } from 'typedi';
 import { isAuth } from '../../middlewares';
-import { ITaskCreateOrUpdateDTO } from '../../../interfaces';
+import { ITask } from '../../../interfaces';
 import config from '../../../config';
 import TasksService from '../../../services/tasks';
 import { Logger } from 'winston';
@@ -15,6 +15,7 @@ const dataValidationMiddleware = celebrate({
     due_date: Joi.string(),
     tags_ids: Joi.array().items(Joi.string()),
     priority_id: Joi.string(),
+    completed: Joi.boolean(),
   }),
 });
 
@@ -24,12 +25,13 @@ const updateTaskHandler = async (req: Request, res: Response, next: NextFunction
   const taskId = req.params.taskId;
   const taskNewFieldsBody = req.body;
 
-  const taskNewFields: Partial<ITaskCreateOrUpdateDTO> = {
+  const taskNewFields: Partial<ITask> = {
     title: taskNewFieldsBody.title,
     description: taskNewFieldsBody.description,
     due_date: taskNewFieldsBody.due_date,
     tags_ids: taskNewFieldsBody.tags_ids,
     priority_id: taskNewFieldsBody.priority_id,
+    completed: taskNewFieldsBody.completed
   };
 
   try {

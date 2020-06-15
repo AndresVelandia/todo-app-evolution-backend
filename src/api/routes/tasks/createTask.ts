@@ -10,10 +10,10 @@ import { LOGGER_KEY } from '../../../config';
 export const dataValidationMiddleware = celebrate({
   body: Joi.object({
     title: Joi.string().required(),
-    description: Joi.string(),
-    due_date: Joi.string(),
-    tags_ids: Joi.array().items(Joi.string()),
-    priority_id: Joi.string(),
+    description: Joi.string().allow(''),
+    due_date: Joi.string().optional(),
+    tags_ids: Joi.array().items(Joi.string()).optional(),
+    priority_id: Joi.string().required(),
   }),
 });
 
