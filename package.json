@@ -18,6 +18,9 @@
         "type": "git",
         "url": "git+https://github.com/AndresVelandia/todo-app-evolution.git"
     },
+    "engines": {
+        "node": "12.x"
+    },
     "keywords": [
         "boilerplay",
         "cron",
